@@ -10,9 +10,9 @@ This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to co
 
 The document is written in [literate programing](http://www.literateprogramming.com/), i.e., the document is also runnable code. Specifically, this code generates 2 files:
 
-* [keystroke.coffee](#Coffeescript "save:"): This is the Coffeescript code for doing the keystroke logging. This can be compiled to javascript if necessary.
+* [keystroke.coffee](#coffeescript "save:"): This is the Coffeescript code for doing the keystroke logging. This can be compiled to javascript if necessary.
 
-* [keystroke.html](#HTML-file "save:"): This is the HTML file in which you can test the Coffeescript code above. In fact, the HTML file includes the Coffeescript directly that runs in the browser.
+* [keystroke.html](#html-file "save:"): This is the HTML file in which you can test the Coffeescript code above. In fact, the HTML file includes the Coffeescript directly that runs in the browser.
 
 To do so:
 
@@ -134,7 +134,7 @@ We may also include the Coffeescript preprocessor.
 
 Time for having a UI to test the keystroke code. We create a simple HTML page with a textarea. We embed the coffeescript code generated above directly, and use the `<script type="text/coffeescript">` trick (http://coffeescript.org/#literate) to run it inside the browser without needing to compile to javascript first.
 
-Notice that we include blocks of code from previous literate programming blocks. 
+Notice that we include blocks of code from previous literate programming blocks.
 
     <!DOCTYPE html>
     <html>
