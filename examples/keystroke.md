@@ -6,9 +6,9 @@ By Gary Feng, Copyleft, 2015
 Original project hosted on [CodePen](http://codepen.io/garyfeng/pen/BoqyGd)
 
 ----
-This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare the text in the textarea, and shows the timestampe and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.
+This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare the text in the textarea, and to show the timestamp and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.
 
-The project was inspired a CodePen by Lonnie Smith (http://codepen.io/anon/pen/zGEBRG), which uses a custom function to do the text diffs. Its function is limited compared to JsDiff. For one, JsDiff offers diffing at char or word level (among other choices). In addition, Lonnie's algorithm will have difficulties handling multiple simultaneous changes that could happen in text editing when someone does a spell checking with the "change all" funciton. In that case, Lonnie's diff function will report the text from the beginning of the first change to the late of the last change as a single block of change, whereas the JsDiff will report many minimal changes. There are certain advantages to this.
+The project was inspired a CodePen by Lonnie Smith (http://codepen.io/anon/pen/zGEBRG), which uses a custom function to do the text diffs. Its function is limited compared to JsDiff. For one, JsDiff offers diffing at char or word level (among other choices). In addition, Lonnie's algorithm will have difficulties handling multiple simultaneous changes that could happen in text editing when someone does a spell checking with the "change all" function. In that case, Lonnie's diff function will report the text from the beginning of the first change to the late of the last change as a single block of change, whereas the JsDiff will accurately report many minimal changes.
 
 ----
 
@@ -39,7 +39,7 @@ So we need to write the following components:
 
 ----
 
-Standardize line endings; this may or may not be strictly necessary, but we do want to be sure that Unix- and Windows-type line endings are treated as the same, and are always written as Unix-style line endings per the data spec.
+First, we standardize line endings. This may or may not be strictly necessary, but we do want to be sure that Unix- and Windows-type line endings are treated as the same, and are always written as Unix-style line endings per the data spec.
 
 
     normalize = (str) -> str.replace(/(\r\n|\r|\n)/gm, '\n')
@@ -74,7 +74,7 @@ Finally, we also create the patch here. This is used later in `patchDiff`.
 
 ----
 
-While it is not trictly necessary to `patchDiff`, i.e., to reconstruct the current state of textbox from diffs, we implement it here for completeness. This would be done post-administration during analysis and does NOT need to be part of any keystroke capture implementation.
+While it is not strictly necessary to `patchDiff`, i.e., to reconstruct the current state of textarea from diffs, we implement it here for completeness. This would be done post-administration during analysis and does NOT need to be part of any keystroke capture implementation.
 
     currentText = ""
 
@@ -84,7 +84,7 @@ While it is not trictly necessary to `patchDiff`, i.e., to reconstruct the curre
 
 ----
 
-Our `logDiff` is a misnomer, because it simply displays result of diff on screen. In a real implementation, we should log the diff and any additional information associated with it. You should also consider the performance of the logging system. In particular, if you use ajax or other asynchronous methods, make sure the logging can keep up with the typing speed (I've seen highschoolers typing over 100 WPM).
+Our `logDiff` is a misnomer, because it simply displays result of diff on screen. In a real implementation, we should log the diff and any additional information associated with it. You should also consider the performance of the logging system. In particular, if you use ajax or other asynchronous methods, make sure the logging can keep up with the typing speed (I've seen high schoolers typing north of 100 WPM).
 
 Back to our application. A line of text is printed after each triggering event (keyboard input), in reverse time order. Gray for unchanged characters; Green for additions, and Red for deletions. This is done using a simple inline CSS.
 
