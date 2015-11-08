@@ -1,9 +1,20 @@
 
 # Demo of Keystroke Logging
 
-By Gary Feng, Copyleft, 2015
+By Gary Feng, 2015
 
 Original project hosted on CodePen (http://codepen.io/garyfeng/pen/BoqyGd) and (http://codepen.io/anon/pen/zGEBRG)
+
+----
+
+# To-dos
+
+- [ ] Complete the design rationale; see the scrolling.md example.
+- [ ] Modify the log structure to use JSON, or possibly the xAPI JS client
+- [ ] Use my logging4javascript library fork for logging.
+- [ ] Save log to local file using saveAs()
+- [ ] Implement the R script for reading and analyzing the data
+- [ ] Implement a Shiny server to visualize the results
 
 ----
 This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare text changes in a textarea and show the timestamp and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.

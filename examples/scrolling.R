@@ -1,0 +1,1 @@
+# We will follow the RMarkdown (http://rmarkdown.rstudio.com/) convention for R scripts.
