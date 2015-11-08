@@ -3,8 +3,9 @@
 
 By Gary Feng, Copyleft, 2015
 
-[CodePen Project](http://codepen.io/garyfeng/pen/BoqyGd), inspired a CodePen by Lonnie Smith
+Originally hosted on [CodePen Project](http://codepen.io/garyfeng/pen/BoqyGd), inspired a CodePen by Lonnie Smith
 
+----
 This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare the text in the textarea, and shows the timestampe and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.
 
 The document is written in [literate programing](http://www.literateprogramming.com/), i.e., the document is also runnable code. Specifically, this code generates 2 files:
@@ -18,7 +19,7 @@ To do so:
 * Install [literate programming](https://github.com/jostylr/literate-programming): `npm install -g literate-programming`
 * Compile the Markdown to code: `literate-programming keystroke.md`
 
-That's it. If all goes right, this will generate the above 2 files. 
+That's it. If all goes right, this will generate the above 2 files.
 
 ----
 
@@ -45,15 +46,17 @@ Here, we use a queue for log events, because users may be typing very rapidly. E
 
     queue = []
 
-Perform a diff. This method is fired on the input event and returns an object representing the difference between the current and previous state of the text input: {changed, position, removedText, addedText}
+----
 
-Using my copy of [JsDiff](http://dl.dropboxusercontent.com/u/36045409/diff.js)
+The `doDiff` function perform a diff. This method is fired on the input event (`e`) and returns an object representing the difference between the current and previous state of the text input. Text diff is done using (my copy of) [JsDiff](http://dl.dropboxusercontent.com/u/36045409/diff.js), which offers a lot of control over diff algorithms. Here we choose to use the `diffChars()` function. Alternatively, you can choose to diff by words, etc.
+
+In addition, we get the event timestamp. Note that we did not use the timestamp in the event `e` but instead created a new timestamp at the time of `doDiff`. This saves the complexity of dealing with event-specific structures. The two methods shouldn't differ by more than a millisecond, but you should test before you decide how to implement.
+
+Finally, we also create the patch here. This is used later in `patchDiff`.
 
     doDiff = (e) ->
       newE = normalize(e.target.value)
       rslt =
-        #newE: newE
-        #oldE: oldE
         timestamp: (new Date()).toJSON()
         diff: JsDiff.diffChars(oldE, newE)
         patch: JsDiff.createPatch("t", oldE, newE)
@@ -62,7 +65,10 @@ Using my copy of [JsDiff](http://dl.dropboxusercontent.com/u/36045409/diff.js)
       #logDiff2(rslt)
       queue.push rslt
 
-Demo reconstructing the current state of textbox based on diffs. This would be done post-administration during analysis and does NOT need to be part of any SBT implementation.
+
+----
+
+While it is not trictly necessary to `patchDiff`, i.e., to reconstruct the current state of textbox from diffs, we implement it here for completeness. This would be done post-administration during analysis and does NOT need to be part of any keystroke capture implementation.
 
     currentText = ""
 
@@ -70,9 +76,11 @@ Demo reconstructing the current state of textbox based on diffs. This would be d
       currentText = JsDiff.applyPatch(currentText, diff.patch)
       return currentText
 
-Display result of diff on screen. In an SBT implementation, this would add a diff to cached task state data. When the state data is sent to the platform via a StateInfo_Reply, it should comform to the data capture specification.
+----
 
-Using [JsDiff.js](https://github.com/kpdecker/jsdiff), e.g., diffDiff = JsDiff.diffChars(one, other);
+Our `logDiff` is a misnomer, because it simply displays result of diff on screen. In a real implementation, we should log the diff and any additional information associated with it. You should also consider the performance of the logging system. In particular, if you use ajax or other asynchronous methods, make sure the logging can keep up with the typing speed (I've seen highschoolers typing over 100 WPM).
+
+Back to our application. A line of text is printed after each triggering event (keyboard input), in reverse time order. Gray for unchanged characters; Green for additions, and Red for deletions. This is done using a simple inline CSS.
 
     logDiff = (m) ->
       str1="<p> <b>time:</b>#{m.timestamp}, <b>diff</b>:"
@@ -86,9 +94,9 @@ Using [JsDiff.js](https://github.com/kpdecker/jsdiff), e.g., diffDiff = JsDiff.d
         style = if part.added then 'color:blue; text-decoration: underline;' else if part.removed then 'color:red; text-decoration: line-through;' else 'color:grey;'
         strdiff +="<span style=#{style}>#{part.value}</span>"
         #console.log(strdiff)
-      $('#results').prepend  str1+strdiff+strend
+      $('#results').prepend  str1 + strdiff + strend
 
-Unload cached events at regular intervals. See comment at top of file regarding the use of a queue in this example.
+We need to log continuously. One approach is to attach the logging functionality to the `logDiff` function. That's fine. We take a different approach, where we check every `50msec` to see if we have somethings to log. This is the idea of caching. In one application we have to cache log entries for 15-20 seconds before we can unload the log entries to a server.
 
     log = () ->
       if queue.length > 0
@@ -96,8 +104,9 @@ Unload cached events at regular intervals. See comment at top of file regarding 
       setTimeout(log, 50)
     log()
 
+----
 
-Attach diff function to textarea. This example is bound to the input event, but, depending on the context, it may make more sense to bind to keypress or keyup or keydown.
+Finally, we need to attach the logging function to text input to the textarea. This example is bound to the input event, but, depending on the context, it may make more sense to bind to keypress or keyup or keydown.
 For example, in one application we were interested in tracking the key travel time, which is the time duration between the keydown and keyup of the same key. This requires slightly more logic to keep track.
 
     $ () ->
@@ -123,6 +132,10 @@ We may also include the Coffeescript preprocessor.
 
 # HTML file
 
+Time for having a UI to test the keystroke code. We create a simple HTML page with a textarea. We embed the coffeescript code generated above directly, and use the `<script type="text/coffeescript">` trick (http://coffeescript.org/#literate) to run it inside the browser without needing to compile to javascript first.
+
+Notice that we include blocks of code from previous literate programming blocks. 
+
     <!DOCTYPE html>
     <html>
       <head>
@@ -139,7 +152,6 @@ We may also include the Coffeescript preprocessor.
         <textarea id="textinput" rows="10" columns="300" style="width: 25%;"></textarea>
 
         <div id="results" style="width:50%;"></div>
-
 
         <script type="text/coffeescript">
           _"Coffeescript"

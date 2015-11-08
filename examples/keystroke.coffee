@@ -7,8 +7,6 @@ queue = []
 doDiff = (e) ->
   newE = normalize(e.target.value)
   rslt =
-    #newE: newE
-    #oldE: oldE
     timestamp: (new Date()).toJSON()
     diff: JsDiff.diffChars(oldE, newE)
     patch: JsDiff.createPatch("t", oldE, newE)
@@ -35,7 +33,7 @@ logDiff = (m) ->
     style = if part.added then 'color:blue; text-decoration: underline;' else if part.removed then 'color:red; text-decoration: line-through;' else 'color:grey;'
     strdiff +="<span style=#{style}>#{part.value}</span>"
     #console.log(strdiff)
-  $('#results').prepend  str1+strdiff+strend
+  $('#results').prepend  str1 + strdiff + strend
 
 log = () ->
   if queue.length > 0
