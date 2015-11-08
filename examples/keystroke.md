@@ -6,7 +6,7 @@ By Gary Feng, Copyleft, 2015
 Original project hosted on [CodePen](http://codepen.io/garyfeng/pen/BoqyGd)
 
 ----
-This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare the text in the textarea, and to show the timestamp and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.
+This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare text changes in a textarea and show the timestamp and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.
 
 The project was inspired a CodePen by Lonnie Smith (http://codepen.io/anon/pen/zGEBRG), which uses a custom function to do the text diffs. Its function is limited compared to JsDiff. For one, JsDiff offers diffing at char or word level (among other choices). In addition, Lonnie's algorithm will have difficulties handling multiple simultaneous changes that could happen in text editing when someone does a spell checking with the "change all" function. In that case, Lonnie's diff function will report the text from the beginning of the first change to the late of the last change as a single block of change, whereas the JsDiff will accurately report many minimal changes.
 
