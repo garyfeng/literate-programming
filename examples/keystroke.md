@@ -3,10 +3,14 @@
 
 By Gary Feng, Copyleft, 2015
 
-Originally hosted on [CodePen Project](http://codepen.io/garyfeng/pen/BoqyGd), inspired a CodePen by Lonnie Smith
+Original project hosted on [CodePen](http://codepen.io/garyfeng/pen/BoqyGd)
 
 ----
 This example uses the [JsDiff library](https://github.com/kpdecker/jsdiff) to compare the text in the textarea, and shows the timestampe and diffs using simple inline CSS. In a real application you'd want to log the data in a structured way.
+
+The project was inspired a CodePen by Lonnie Smith (http://codepen.io/anon/pen/zGEBRG), which uses a custom function to do the text diffs. Its function is limited compared to JsDiff. For one, JsDiff offers diffing at char or word level (among other choices). In addition, Lonnie's algorithm will have difficulties handling multiple simultaneous changes that could happen in text editing when someone does a spell checking with the "change all" funciton. In that case, Lonnie's diff function will report the text from the beginning of the first change to the late of the last change as a single block of change, whereas the JsDiff will report many minimal changes. There are certain advantages to this.
+
+----
 
 The document is written in [literate programing](http://www.literateprogramming.com/), i.e., the document is also runnable code. Specifically, this code generates 2 files:
 
@@ -32,6 +36,8 @@ So we need to write the following components:
 * patchDiff: this is not strictly necessary for what we do. We implement it here just for completeness.
 * logDiff: take the output of doDiff and do something, such as to log every x msec.
 * attaching doDiff to a triggering event, such as the "input" event.
+
+----
 
 Standardize line endings; this may or may not be strictly necessary, but we do want to be sure that Unix- and Windows-type line endings are treated as the same, and are always written as Unix-style line endings per the data spec.
 
